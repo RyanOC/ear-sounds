@@ -1,0 +1,375 @@
+:root {
+  --bg: #0f1115;
+  --card: #181b22;
+  --line: #2a2f3a;
+  --text: #e6e8ee;
+  --muted: #9aa1b2;
+  --accent: #5aa9ff;
+  --accent-ink: #06121f;
+  --on: #39c07f;
+  --warn-bg: #3a2a0c;
+  --warn: #ffcf6e;
+  --danger: #e5484d;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  padding: 0 16px 24px;
+  line-height: 1.4;
+}
+
+h2 { font-size: 1.1rem; margin: 0; }
+
+/* Title area: scrolls away so it doesn't eat screen space while tuning sounds. */
+.hero { padding: 28px 0 18px; max-width: 760px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { color: var(--accent); display: grid; place-items: center; flex: none; }
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #ffffff 0%, #9cc9ff 55%, #b48cff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.tagline { font-size: clamp(1rem, 2.6vw, 1.15rem); color: #c9cedb; margin: 12px 0 8px; }
+.tagline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.gh-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+.gh-link:hover { border-color: var(--accent); color: #fff; }
+
+/* Slim transport bar that stays pinned while scrolling. */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.transport { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; flex: 1; }
+.transport .ctl { min-width: min(260px, 100%); margin: 0; flex: 1; }
+
+.warning {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--warn-bg);
+  color: var(--warn);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+}
+.warning .dismiss { margin-left: auto; }
+
+/* Masonry-style columns: each card stacks right under the one above it,
+   so short cards don't leave gaps the way grid rows do. One column on phones. */
+.grid {
+  column-width: 340px;
+  column-gap: 16px;
+  margin-top: 16px;
+}
+.grid > .card {
+  break-inside: avoid;
+  margin: 0 0 16px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  min-width: 0;
+}
+.card > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.card.off > :not(header) { opacity: 0.45; }
+.blurb { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+.btns { display: flex; gap: 6px; align-items: center; }
+
+.ctl { margin: 12px 0; min-width: 0; }
+.ctl > label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+.ctl-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 0; }
+/* Slider gets its own full-width line; −/value/+/unit wrap onto the line below. */
+.ctl-row input[type='range'] { flex: 1 1 100%; min-width: 0; margin: 0; }
+.ctl-row input[type='number'] { width: 6.5em; }
+.ctl-row select, .ctl-row input[type='text'] { flex: 1; min-width: 0; }
+.unit { color: var(--muted); font-size: 0.85rem; }
+/* Grouped controls stack one per row (good on phones, no overlap on narrow cards). */
+.row2 { display: block; }
+
+input, select, textarea, button { font: inherit; color: inherit; }
+input[type='number'], input[type='text'], select, textarea {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+}
+textarea { width: 100%; resize: vertical; }
+input[type='range'] { accent-color: var(--accent); height: 32px; }
+
+button {
+  background: #232834;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-height: 40px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:disabled { opacity: 0.4; cursor: default; }
+button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+/* On/off switch: grey track + knob left = off; green track + knob right = on. */
+button.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border-color: transparent;
+  padding: 4px 6px;
+}
+button.switch:hover { border-color: var(--line); }
+button.switch .track {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: #3a4050;
+  transition: background 0.15s ease;
+  flex: none;
+}
+button.switch .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #cfd3dc;
+  transition: transform 0.15s ease;
+}
+button.switch.checked .track { background: var(--on); }
+button.switch.checked .knob { transform: translateX(20px); background: #fff; }
+.switch-label { min-width: 2em; text-align: left; color: var(--muted); font-weight: 600; }
+button.switch.checked .switch-label { color: var(--on); }
+button.fine { min-width: 44px; padding: 8px 0; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button.playing { outline: 3px solid var(--warn); }
+
+.play { font-size: 1.1rem; font-weight: 600; min-width: 120px; }
+.play.on { background: var(--on); border-color: var(--on); color: #04140b; }
+
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { flex: 1 1 0; min-width: max-content; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.choices { display: flex; gap: 8px; margin: 12px 0; }
+.choices button { flex: 1; min-height: 64px; font-size: 1.05rem; font-weight: 600; }
+
+.info { color: var(--muted); font-size: 0.9rem; margin: 6px 0; }
+.hint { color: var(--muted); font-size: 0.8rem; margin: 6px 0; }
+.status { font-weight: 600; margin: 12px 0 4px; }
+.result { font-size: 1.6rem; font-weight: 700; margin: 12px 0; }
+.summary {
+  white-space: pre-wrap;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* STOP ALL sits next to Play in the pinned bar, so it's always in reach. */
+.play-row { display: flex; gap: 8px; align-items: center; }
+.stop-all {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  min-width: 120px;
+}
+.stop-all:hover { border-color: #fff; }
+
+.grid > .card.rhythm { column-span: all; }
+.warn-text { color: var(--warn); font-size: 0.85rem; margin: 6px 0; }
+
+.timeline { margin: 14px 0 6px; }
+.track {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 0;
+}
+.lane { position: relative; height: 26px; margin: 4px 0; }
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 4px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  line-height: 26px;
+  padding: 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #06121f;
+}
+.bar.zip { background: var(--accent); }
+.bar.bub { background: #b48cff; }
+.bar.bub.continuous { opacity: 0.45; }
+.bar.tone { background: #f0b45a; }
+.bar.tone.continuous { opacity: 0.7; }
+.scale { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.75rem; margin-top: 4px; }
+
+/* Collapsible cards */
+.card > header > button.collapse {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--text);
+}
+.card > header > button.collapse svg { transition: transform 0.15s ease; }
+.card > header > button.collapse:hover { background: #232834; border-color: var(--muted); }
+.card.collapsed > header > button.collapse svg { transform: rotate(180deg); }
+.card > header > button.collapse + div { flex: 1; min-width: 0; }
+.card.collapsed > :not(header) { display: none; }
+.card.collapsed > header { margin-bottom: 0; align-items: center; }
+.card.collapsed .blurb { display: none; }
+
+/* Banner shown when a share link is opened */
+.shared-banner {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #0f2a44;
+  color: #cfe6ff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+}
+.shared-banner.error { background: #3a1416; color: #ffd0d2; }
+.shared-banner .dismiss { margin-left: auto; }
+.share-msg { overflow-wrap: anywhere; }
+
+/* "Your sound" bar: full width at the top, visually distinct */
+.grid > .card.soundbar {
+  column-span: all;
+  border: 2px solid var(--accent);
+  background: linear-gradient(180deg, #16263a 0%, var(--card) 100%);
+}
+.soundbar h2 { font-size: 1.25rem; }
+.soundbar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+  gap: 0 24px;
+}
+.soundbar .ctl { margin: 8px 0; }
+.soundbar .ctl-row > input.name-input,
+.soundbar .ctl-row > select { flex: 1 1 200px; min-height: 44px; font-size: 1rem; }
+.soundbar .ctl-row > input.name-input { font-weight: 600; }
+.rename-row { margin-top: 8px; }
+.rename-row > input { flex: 1 1 200px; min-height: 40px; }
+
+button.danger { background: var(--danger); border-color: var(--danger); color: #fff; font-weight: 700; }
+button.danger:disabled { background: #4a2326; border-color: #4a2326; color: #c9a3a5; opacity: 1; }
+button.danger-outline { background: transparent; border-color: var(--danger); color: #ff8a8e; }
+button.danger-outline:hover { background: #2a1416; border-color: #ff8a8e; }
+
+/* Typed-confirmation dialog */
+dialog.confirm-dialog {
+  width: min(460px, calc(100vw - 32px));
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid var(--danger);
+  border-radius: 14px;
+  padding: 20px;
+}
+dialog.confirm-dialog::backdrop { background: rgba(0, 0, 0, 0.7); }
+dialog.confirm-dialog h2 { color: #ff8a8e; font-size: 1.25rem; }
+dialog.confirm-dialog ul { margin: 8px 0 12px; padding-left: 20px; }
+dialog.confirm-dialog label { display: block; margin: 12px 0 6px; }
+dialog.confirm-dialog code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-weight: 700; }
+dialog.confirm-dialog input { width: 100%; min-height: 44px; font-size: 1rem; }
+dialog.confirm-dialog .actions { justify-content: flex-end; margin-bottom: 0; }
+.danger-text { color: #ffb3b5; }
+
+/* Play is disabled until a sound is switched on */
+.play-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.play:disabled { opacity: 0.45; cursor: not-allowed; }
+.play-hint { font-size: 0.75rem; color: var(--warn); }
+
+/* Footer, with the destructive reset kept well away from everyday controls */
+.site-footer {
+  margin-top: 32px;
+  padding: 20px 0 8px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px 32px;
+}
+.site-footer p { margin: 4px 0; }
+.site-footer a { color: var(--accent); }
+.footer-danger { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+
+/* Master volume in the top bar: everything on one line, centred with Play / STOP ALL */
+.ctl.ctl-inline { display: flex; align-items: center; gap: 10px; }
+.ctl.ctl-inline > label { margin: 0; white-space: nowrap; font-size: 0.9rem; }
+.ctl.ctl-inline .ctl-row { flex: 1; flex-wrap: nowrap; align-items: center; }
+.ctl.ctl-inline .ctl-row input[type='range'] { flex: 1 1 auto; min-width: 80px; }
+.ctl.ctl-inline .ctl-row input[type='number'] { width: 4.5em; text-align: right; }
+.ctl.ctl-inline .unit { min-width: 0; }
+@media (max-width: 480px) {
+  /* Phones: label above, slider + value + unit still on one line */
+  .ctl.ctl-inline { flex-direction: column; align-items: stretch; gap: 4px; }
+}
